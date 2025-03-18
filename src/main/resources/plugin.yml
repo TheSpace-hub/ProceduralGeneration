@@ -1,0 +1,7 @@
+name: ProceduralGeneration
+version: '1.0-SNAPSHOT'
+main: solutions.brilliant.proceduralGeneration.ProceduralGeneration
+api-version: '1.18'
+authors: [ BrilliantSolutions ]
+description: Procedural generation for the Brilliant Solution video channel
+website: https://www.youtube.com/@BrilliantSolutionsChess

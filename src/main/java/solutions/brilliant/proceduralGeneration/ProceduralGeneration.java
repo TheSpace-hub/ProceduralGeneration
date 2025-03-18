@@ -1,0 +1,17 @@
+package solutions.brilliant.proceduralGeneration;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+public final class ProceduralGeneration extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        // Plugin startup logic
+
+    }
+
+    @Override
+    public void onDisable() {
+        // Plugin shutdown logic
+    }
+}
