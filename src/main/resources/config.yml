@@ -3,7 +3,7 @@ games-settings:
   example:
     name: 'Example image'
     generator:
-      rooms-count: 70
+      initial-number-of-rooms: 70
       percentage-of-additional-edges: 20
       building-style: # ID всех блоков: https://minecraft-inside.ru/blocks/1.18.2/
         floor: 'birch_planks'
