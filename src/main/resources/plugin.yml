@@ -5,3 +5,8 @@ api-version: '1.18'
 authors: [ BrilliantSolutions ]
 description: Procedural generation for the Brilliant Solution video channel
 website: https://www.youtube.com/@BrilliantSolutionsChess
+commands:
+  bs-generator:
+    description: 'Main plugin command'
+    aliases:
+      - bsg
