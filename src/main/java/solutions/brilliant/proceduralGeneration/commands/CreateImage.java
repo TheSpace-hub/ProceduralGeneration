@@ -76,7 +76,7 @@ public class CreateImage {
 
     private Config.GamesSettings.Image createImage(String id) {
         Config.GamesSettings.Image image = new Config.GamesSettings.Image(
-                id, id, "container_" + id,
+                id, id, "image_" + id,
                 new Config.GamesSettings.Image.Generator(
                         70, 20,
                         new Config.GamesSettings.Image.Generator.BuildingStyle(
