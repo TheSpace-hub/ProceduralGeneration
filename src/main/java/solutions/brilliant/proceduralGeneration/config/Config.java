@@ -26,9 +26,10 @@ public class Config {
 
     private static GamesSettings.Image getImage(ConfigurationSection section) {
         String name = section.getString("name");
+        String world = section.getString("world");
         GamesSettings.Image.Generator generator = getImageGenerator(section);
 
-        return new GamesSettings.Image(name, generator);
+        return new GamesSettings.Image(section.getName(), name, world, generator);
     }
 
     private static GamesSettings.Image.Generator getImageGenerator(ConfigurationSection imageSection) {
@@ -72,7 +73,9 @@ public class Config {
         public static List<Image> images;
 
         public record Image(
+                String id,
                 String name,
+                String world,
                 GamesSettings.Image.Generator generator) {
 
             public record Generator(
@@ -89,6 +92,26 @@ public class Config {
                 }
             }
         }
+
+        public static void addImage(Image image) {
+            GamesSettings.images.add(image);
+            ConfigurationSection gamesSettings = plugin.getConfig().getConfigurationSection("games-settings");
+            ConfigurationSection section = gamesSettings.createSection(image.id);
+            section.set("name", image.name);
+            section.set("world", image.world);
+            ConfigurationSection generator = section.createSection("generator");
+            generator.set("initial-number-of-rooms", image.generator.initialNumberOfRooms);
+            generator.set("percentage-of-additional-edges", image.generator.percentageOfAdditionalEdges);
+            ConfigurationSection buildingStyle = generator.createSection("building-style");
+            buildingStyle.set("floor", image.generator.buildingStyle.floor);
+            buildingStyle.set("baseboard", image.generator.buildingStyle.baseboard);
+            buildingStyle.set("wall", image.generator.buildingStyle.wall);
+            buildingStyle.set("ceiling", image.generator.buildingStyle.ceiling);
+            buildingStyle.set("light", image.generator.buildingStyle.light);
+
+            plugin.saveConfig();
+        }
+
     }
 
 }

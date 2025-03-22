@@ -2,6 +2,7 @@ version: 1.0
 games-settings:
   example:
     name: 'Example image'
+    world: 'image-0'
     generator:
       initial-number-of-rooms: 70
       percentage-of-additional-edges: 20
