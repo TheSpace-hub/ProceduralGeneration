@@ -29,19 +29,15 @@ public class CreateImage {
                     "находясь непосредственно на сервере.");
             return;
         }
-
-        if (strings.length != 3) {
+        plugin.getLogger().log(Level.INFO, String.valueOf(strings.length));
+        if (strings.length != 1) {
             player.sendMessage(
                     Component.textOfChildren(
                             Component.text("Вы неправильно ввели команду! Необходимо: ")
                                     .color(TextColor.color(0xff0000)),
-                            Component.text("/bsg create image ")
-                                    .color(TextColor.color(0xff0000))
-                                    .decorate(TextDecoration.ITALIC),
-                            Component.text("имя-образа")
+                            Component.text("/bsg create")
                                     .color(TextColor.color(0xff0000))
                                     .decorate(TextDecoration.ITALIC)
-                                    .decorate(TextDecoration.UNDERLINED)
                     )
             );
             return;
@@ -53,7 +49,7 @@ public class CreateImage {
                         .color(TextColor.color(0x00ff00))
         );
 
-        World world = createWorldForImage("image_" + strings[2]);
+        World world = createWorldForImage();
         player.teleport(
                 new Location(world, 0, 50, 0)
         );
@@ -65,8 +61,8 @@ public class CreateImage {
         );
     }
 
-    private World createWorldForImage(String name) {
-        WorldCreator creator = new WorldCreator(name);
+    private World createWorldForImage() {
+        WorldCreator creator = new WorldCreator("image");
         creator.type(WorldType.FLAT);
         creator.generator(new EmptyChunkGenerator());
 

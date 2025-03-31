@@ -21,26 +21,15 @@ public class BSGCommandHandler implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         switch (strings[0]) {
-            case "create" -> {
-                switch (strings[1]) {
-                    case "image" -> new CreateImage(plugin).executor(commandSender, command, s, strings);
-                }
-            }
+            case "create" -> new CreateImage(plugin).executor(commandSender, command, s, strings);
         }
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        switch (strings.length) {
-            case 1:
-                return List.of("create", "configure", "list", "join", "join-gui");
-            case 2: {
-                switch (strings[0]) {
-                    case "create", "configure", "list":
-                        return List.of("image");
-                }
-            }
+        if (strings.length == 1) {
+            return List.of("create", "join");
         }
         return List.of();
     }
