@@ -2,7 +2,6 @@ package solutions.brilliant.proceduralGeneration;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import solutions.brilliant.proceduralGeneration.commands.BSGCommandHandler;
-import solutions.brilliant.proceduralGeneration.config.Config;
 import solutions.brilliant.proceduralGeneration.listeners.BlockHandler;
 import solutions.brilliant.proceduralGeneration.listeners.PlayerHandler;
 
@@ -13,8 +12,6 @@ public final class ProceduralGeneration extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().log(Level.INFO, "Plugin startup");
-        saveDefaultConfig();
-        Config.reload();
 
         getCommand("bs-generator").setExecutor(new BSGCommandHandler(this));
         getCommand("bs-generator").setTabCompleter(new BSGCommandHandler(this));
