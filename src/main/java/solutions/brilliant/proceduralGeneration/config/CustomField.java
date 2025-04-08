@@ -3,7 +3,6 @@ package solutions.brilliant.proceduralGeneration.config;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,53 +10,37 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class CustomField {
-    private final JavaPlugin plugin;
+    private final Plugin plugin;
     private FileConfiguration config;
-    private File configFile;
     private final String fileName;
 
-    public CustomField(JavaPlugin plugin, String fileName) {
+    public CustomField(Plugin plugin, String fileName) {
         this.plugin = plugin;
-        this.fileName = fileName;
+        this.fileName = fileName + ".yml";
+
+        setup();
     }
 
-    public void setup() {
+    private void setup() {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
         }
 
-        configFile = new File(plugin.getDataFolder(), fileName);
+        File configFile = new File(new File(plugin.getDataFolder(), "fields"), fileName);
 
         if (!configFile.exists()) {
-            try {
-                configFile.createNewFile();
-            } catch (IOException e) {
-                plugin.getLogger().severe("Не удалось создать файл " + fileName);
-            }
+            plugin.getLogger().severe("Не существует поля с названием " + fileName);
+            return;
         }
 
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
-    public FileConfiguration get() {
-        return config;
+    public List<List<Integer>> getFiled() {
+        return (List<List<Integer>>) config.getList("field");
     }
-
-    public void save() {
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            plugin.getLogger().severe("Не удалось сохранить файл " + fileName);
-        }
-    }
-
-    public void reload() {
-        config = YamlConfiguration.loadConfiguration(configFile);
-    }
-
 
     public static List<String> getAllFieldsFilesNames(Plugin plugin) {
         File fieldsDir = new File(plugin.getDataFolder(), "fields");
