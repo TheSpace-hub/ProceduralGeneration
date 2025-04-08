@@ -21,15 +21,15 @@ public class BSGCommandHandler implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         switch (strings[0]) {
-            case "create" -> new CreateImage(plugin).executor(commandSender, command, s, strings);
+            case "generate" -> new GenerateField(plugin).executor(commandSender, command, s, strings);
         }
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (strings.length == 1) {
-            return List.of("create", "join");
+        if (strings.length == 1 || commandSender.hasPermission("*")) {
+            return List.of("generate");
         }
         return List.of();
     }

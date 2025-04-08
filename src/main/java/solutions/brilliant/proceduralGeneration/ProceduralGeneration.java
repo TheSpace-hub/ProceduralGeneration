@@ -8,6 +8,7 @@ import solutions.brilliant.proceduralGeneration.listeners.BlockHandler;
 import solutions.brilliant.proceduralGeneration.listeners.PlayerHandler;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class ProceduralGeneration extends JavaPlugin {
 
