@@ -23,12 +23,7 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        World world = Bukkit.getWorld("field");
-
-        player.teleport(
-                new Location(world, 0, 51, 0)
-        );
+        RuleExecutor.getInstance().event(event);
     }
 
     @EventHandler
@@ -37,12 +32,13 @@ public class PlayerHandler implements Listener {
     }
 
     @EventHandler
-    public void onBlockBreakByPlayer(BlockBreakEvent event) {
+    public void onBlockBreak(BlockBreakEvent event) {
         RuleExecutor.getInstance().event(event);
     }
 
     @EventHandler
-    public void onPlayerPlaceBlock(BlockPlaceEvent event) {
+    public void onBlockPlace(BlockPlaceEvent event) {
         RuleExecutor.getInstance().event(event);
     }
+
 }

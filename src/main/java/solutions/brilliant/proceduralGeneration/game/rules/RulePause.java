@@ -3,9 +3,9 @@ package solutions.brilliant.proceduralGeneration.game.rules;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import solutions.brilliant.proceduralGeneration.game.Rule;
 
@@ -38,7 +38,8 @@ public class RulePause implements Rule {
             onBlockBreakByPlayer((BlockBreakEvent) event);
         if (event.getClass() == BlockPlaceEvent.class)
             onPlayerPlaceBlock((BlockPlaceEvent) event);
-
+        if (event.getClass() == PlayerJoinEvent.class)
+            onPlayerJoin((PlayerJoinEvent) event);
     }
 
     @Override
@@ -65,6 +66,20 @@ public class RulePause implements Rule {
         Player player = event.getPlayer();
         if (!player.isOp())
             event.setCancelled(true);
+    }
+
+    private void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        World world = Bukkit.getWorld("field");
+
+        if (world == null) {
+            Bukkit.getLogger().log(Level.SEVERE, "Мир не создан");
+            return;
+        }
+
+        Location location = new Location(world, 0, 51, 0);
+        player.teleport(location);
+        player.setGameMode(GameMode.ADVENTURE);
     }
 
 }
