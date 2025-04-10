@@ -4,10 +4,12 @@ import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.game.rules.DefaultRules;
 import solutions.brilliant.proceduralGeneration.game.rules.RulePause;
+import solutions.brilliant.proceduralGeneration.game.rules.RulePreparingForGame;
 
 import java.util.Map;
+import java.util.logging.Level;
 
-public class RuleExecutor {
+public class RuleExecutor implements Runnable {
     private static RuleExecutor instance;
 
     private final Plugin plugin;
@@ -20,7 +22,8 @@ public class RuleExecutor {
 
         executors = Map.of(
                 State.DEFAULT, new DefaultRules(plugin),
-                State.PAUSE, new RulePause(plugin)
+                State.PAUSE, new RulePause(plugin),
+                State.PREPARING_FOR_GAME, new RulePreparingForGame(plugin)
         );
     }
 
@@ -34,6 +37,11 @@ public class RuleExecutor {
     public void changeState(State state) {
         this.state = state;
         executors.get(state).enter();
+    }
+
+    @Override
+    public void run() {
+        tick();
     }
 
     public void tick() {
@@ -62,6 +70,7 @@ public class RuleExecutor {
         DEFAULT,
         PAUSE,
         PREPARING_FOR_GAME,
+        PREPARATORY,
     }
 
 }

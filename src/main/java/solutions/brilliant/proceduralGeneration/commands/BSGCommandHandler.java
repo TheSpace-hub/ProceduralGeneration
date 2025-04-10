@@ -9,8 +9,10 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import solutions.brilliant.proceduralGeneration.config.CustomField;
+import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 import java.util.List;
+import java.util.logging.Level;
 
 public class BSGCommandHandler implements CommandExecutor, TabCompleter {
 
@@ -22,8 +24,11 @@ public class BSGCommandHandler implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (commandSender instanceof Player)
+        if (commandSender instanceof Player player && !player.isOp())
             return false;
+        if (strings[0].equals("start")) {
+            RuleExecutor.getInstance(plugin).changeState(RuleExecutor.State.PREPARING_FOR_GAME);
+        }
         return true;
     }
 

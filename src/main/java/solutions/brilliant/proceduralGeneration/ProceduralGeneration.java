@@ -28,6 +28,8 @@ public final class ProceduralGeneration extends JavaPlugin {
             CreateEmptyWorld.create();
 
         RuleExecutor.getInstance(this).changeState(RuleExecutor.State.PAUSE);
+
+        Bukkit.getScheduler().runTaskTimer(this, RuleExecutor.getInstance(this), 0, 1);
     }
 
     @Override
