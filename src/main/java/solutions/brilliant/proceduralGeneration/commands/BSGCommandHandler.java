@@ -24,23 +24,11 @@ public class BSGCommandHandler implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if (commandSender instanceof Player)
             return false;
-
-        switch (strings[0]) {
-            case "generate" -> new GenerateField(plugin).executor(commandSender, command, s, strings);
-        }
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (commandSender instanceof Player)
-            return List.of();
-
-        if (strings.length == 1) {
-            return List.of("generate");
-        } else if (strings.length == 2 && strings[0].equals("generate")) {
-            return CustomField.getAllFieldsFilesNames(plugin);
-        }
         return List.of();
     }
 

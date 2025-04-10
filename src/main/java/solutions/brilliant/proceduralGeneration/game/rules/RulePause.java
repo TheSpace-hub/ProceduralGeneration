@@ -7,11 +7,18 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.game.Rule;
 
 import java.util.logging.Level;
 
 public class RulePause implements Rule {
+
+    private final Plugin plugin;
+
+    public RulePause(Plugin plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public void enter() {

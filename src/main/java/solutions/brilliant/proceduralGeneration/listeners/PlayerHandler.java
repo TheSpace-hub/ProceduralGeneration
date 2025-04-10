@@ -15,7 +15,7 @@ import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 public class PlayerHandler implements Listener {
 
-    private Plugin plugin;
+    private final Plugin plugin;
 
     public PlayerHandler(Plugin plugin) {
         this.plugin = plugin;
@@ -23,22 +23,22 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        RuleExecutor.getInstance().event(event);
+        RuleExecutor.getInstance(plugin).event(event);
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        RuleExecutor.getInstance().event(event);
+        RuleExecutor.getInstance(plugin).event(event);
     }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        RuleExecutor.getInstance().event(event);
+        RuleExecutor.getInstance(plugin).event(event);
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        RuleExecutor.getInstance().event(event);
+        RuleExecutor.getInstance(plugin).event(event);
     }
 
 }

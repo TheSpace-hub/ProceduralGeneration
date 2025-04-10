@@ -1,36 +1,31 @@
 package solutions.brilliant.proceduralGeneration.commands;
 
 import org.bukkit.*;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import solutions.brilliant.proceduralGeneration.config.CustomField;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class GenerateField {
+    private static GenerateField instance;
 
     private final Plugin plugin;
 
-    public GenerateField(Plugin plugin) {
+    private GenerateField(Plugin plugin) {
         this.plugin = plugin;
     }
 
-    public void executor(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (commandSender instanceof Player)
-            return;
-
-        if (strings.length != 2) {
-            plugin.getLogger().log(Level.WARNING, "Ты команду ввёл не правильно >:(");
-            return;
+    public static GenerateField getInstance(Plugin plugin) {
+        if (instance == null) {
+            instance = new GenerateField(plugin);
         }
+        return instance;
+    }
+
+    public void generate(String name) {
         clear();
-        List<List<Integer>> field = new CustomField(plugin, strings[1]).getFiled();
+        List<List<Integer>> field = new CustomField(plugin, name).getFiled();
         fill(field);
     }
 

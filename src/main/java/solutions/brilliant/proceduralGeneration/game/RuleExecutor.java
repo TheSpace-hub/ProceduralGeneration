@@ -1,24 +1,30 @@
 package solutions.brilliant.proceduralGeneration.game;
 
 import org.bukkit.event.Event;
+import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.game.rules.RulePause;
 
 import java.util.Map;
 
 public class RuleExecutor {
     private static RuleExecutor instance;
+
+    private final Plugin plugin;
     private State state = State.PAUSE;
 
-    private final Map<State, Rule> executors = Map.of(
-            State.PAUSE, new RulePause()
-    );
+    private final Map<State, Rule> executors;
 
-    private RuleExecutor() {
+    private RuleExecutor(Plugin plugin) {
+        this.plugin = plugin;
+
+        executors = Map.of(
+                State.PAUSE, new RulePause(plugin)
+        );
     }
 
-    public static RuleExecutor getInstance() {
+    public static RuleExecutor getInstance(Plugin plugin) {
         if (instance == null) {
-            instance = new RuleExecutor();
+            instance = new RuleExecutor(plugin);
         }
         return instance;
     }
