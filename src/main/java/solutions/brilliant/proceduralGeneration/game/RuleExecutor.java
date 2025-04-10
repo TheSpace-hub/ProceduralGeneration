@@ -29,10 +29,18 @@ public class RuleExecutor {
     }
 
     public void tick() {
+        tick(state);
+    }
+
+    public void tick(State override) {
         executors.get(state).tick();
     }
 
     public void event(Event event) {
+        event(state, event);
+    }
+
+    public void event(State override, Event event) {
         executors.get(state).event(event);
     }
 
@@ -41,7 +49,8 @@ public class RuleExecutor {
     }
 
     public enum State {
-        PAUSE
+        PAUSE,
+        PREPARING_FOR_GAME,
     }
 
 }
