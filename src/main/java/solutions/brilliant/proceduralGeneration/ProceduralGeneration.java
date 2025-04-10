@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import solutions.brilliant.proceduralGeneration.commands.BSGCommandHandler;
 import solutions.brilliant.proceduralGeneration.commands.CreateEmptyWorld;
+import solutions.brilliant.proceduralGeneration.config.CustomField;
 import solutions.brilliant.proceduralGeneration.listeners.PlayerHandler;
 
 import java.util.logging.Level;
@@ -15,6 +16,7 @@ public final class ProceduralGeneration extends JavaPlugin {
         getLogger().log(Level.INFO, "Plugin startup");
 
         saveDefaultConfig();
+        CustomField.setup(this);
 
         getCommand("bs-generator").setExecutor(new BSGCommandHandler(this));
         getCommand("bs-generator").setTabCompleter(new BSGCommandHandler(this));

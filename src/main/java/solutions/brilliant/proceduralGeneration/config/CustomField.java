@@ -20,10 +20,20 @@ public class CustomField {
         this.plugin = plugin;
         this.fileName = fileName + ".yml";
 
-        setup();
+        check();
     }
 
-    private void setup() {
+    public static void setup(Plugin plugin) {
+        if (!plugin.getDataFolder().exists()) {
+            plugin.getDataFolder().mkdir();
+        }
+
+        File fieldsDir = new File(plugin.getDataFolder(), "fields");
+        if (!fieldsDir.exists())
+            fieldsDir.mkdir();
+    }
+
+    private void check() {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
         }
