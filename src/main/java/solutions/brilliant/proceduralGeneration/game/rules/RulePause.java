@@ -1,0 +1,70 @@
+package solutions.brilliant.proceduralGeneration.game.rules;
+
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import solutions.brilliant.proceduralGeneration.game.Rule;
+
+import java.util.logging.Level;
+
+public class RulePause implements Rule {
+
+    @Override
+    public void enter() {
+        World world = Bukkit.getWorld("field");
+
+        if (world == null) {
+            Bukkit.getLogger().log(Level.SEVERE, "Мир не создан");
+            return;
+        }
+
+        Location location = new Location(world, 0, 51, 0);
+        world.setDifficulty(Difficulty.PEACEFUL);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.teleport(location);
+            player.setGameMode(GameMode.ADVENTURE);
+        }
+    }
+
+    @Override
+    public void event(Event event) {
+        if (event.getClass() == PlayerMoveEvent.class)
+            onPlayerMove((PlayerMoveEvent) event);
+        if (event.getClass() == BlockBreakEvent.class)
+            onBlockBreakByPlayer((BlockBreakEvent) event);
+        if (event.getClass() == BlockPlaceEvent.class)
+            onPlayerPlaceBlock((BlockPlaceEvent) event);
+
+    }
+
+    @Override
+    public void tick() {
+
+    }
+
+    private void onPlayerMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (player.getLocation().getBlockY() <= 0) {
+            player.teleport(
+                    new Location(player.getWorld(), 0, 50, 0)
+            );
+        }
+    }
+
+    private void onBlockBreakByPlayer(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        if (!player.isOp())
+            event.setCancelled(true);
+    }
+
+    private void onPlayerPlaceBlock(BlockPlaceEvent event) {
+        Player player = event.getPlayer();
+        if (!player.isOp())
+            event.setCancelled(true);
+    }
+
+}

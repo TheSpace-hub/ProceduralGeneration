@@ -6,9 +6,12 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
+import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 public class PlayerHandler implements Listener {
 
@@ -30,12 +33,16 @@ public class PlayerHandler implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        if (player.getLocation().getBlockY() <= 0) {
-            player.teleport(
-                    new Location(player.getWorld(), 0, 50, 0)
-            );
-        }
+        RuleExecutor.getInstance().event(event);
     }
 
+    @EventHandler
+    public void onBlockBreakByPlayer(BlockBreakEvent event) {
+        RuleExecutor.getInstance().event(event);
+    }
+
+    @EventHandler
+    public void onPlayerPlaceBlock(BlockPlaceEvent event) {
+        RuleExecutor.getInstance().event(event);
+    }
 }
