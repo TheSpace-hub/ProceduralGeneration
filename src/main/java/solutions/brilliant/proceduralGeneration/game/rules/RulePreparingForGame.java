@@ -24,7 +24,7 @@ public class RulePreparingForGame implements Rule {
 
     @Override
     public void event(Event event) {
-        RuleExecutor.getInstance(plugin).event(RuleExecutor.State.PAUSE, event);
+
     }
 
     @Override

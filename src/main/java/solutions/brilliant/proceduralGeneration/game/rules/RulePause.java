@@ -39,14 +39,7 @@ public class RulePause implements Rule {
 
     @Override
     public void event(Event event) {
-        if (event.getClass() == PlayerMoveEvent.class)
-            onPlayerMove((PlayerMoveEvent) event);
-        if (event.getClass() == BlockBreakEvent.class)
-            onBlockBreakByPlayer((BlockBreakEvent) event);
-        if (event.getClass() == BlockPlaceEvent.class)
-            onPlayerPlaceBlock((BlockPlaceEvent) event);
-        if (event.getClass() == PlayerJoinEvent.class)
-            onPlayerJoin((PlayerJoinEvent) event);
+
     }
 
     @Override
@@ -54,39 +47,6 @@ public class RulePause implements Rule {
 
     }
 
-    private void onPlayerMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        if (player.getLocation().getBlockY() <= 0) {
-            player.teleport(
-                    new Location(player.getWorld(), 0, 50, 0)
-            );
-        }
-    }
 
-    private void onBlockBreakByPlayer(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        if (!player.isOp())
-            event.setCancelled(true);
-    }
-
-    private void onPlayerPlaceBlock(BlockPlaceEvent event) {
-        Player player = event.getPlayer();
-        if (!player.isOp())
-            event.setCancelled(true);
-    }
-
-    private void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        World world = Bukkit.getWorld("field");
-
-        if (world == null) {
-            Bukkit.getLogger().log(Level.SEVERE, "Мир не создан");
-            return;
-        }
-
-        Location location = new Location(world, 0, 51, 0);
-        player.teleport(location);
-        player.setGameMode(GameMode.ADVENTURE);
-    }
 
 }

@@ -2,6 +2,7 @@ package solutions.brilliant.proceduralGeneration.game;
 
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
+import solutions.brilliant.proceduralGeneration.game.rules.DefaultRules;
 import solutions.brilliant.proceduralGeneration.game.rules.RulePause;
 
 import java.util.Map;
@@ -18,6 +19,7 @@ public class RuleExecutor {
         this.plugin = plugin;
 
         executors = Map.of(
+                State.DEFAULT, new DefaultRules(plugin),
                 State.PAUSE, new RulePause(plugin)
         );
     }
@@ -39,6 +41,7 @@ public class RuleExecutor {
     }
 
     public void tick(State override) {
+        executors.get(State.DEFAULT).tick();
         executors.get(state).tick();
     }
 
@@ -47,6 +50,7 @@ public class RuleExecutor {
     }
 
     public void event(State override, Event event) {
+        executors.get(State.DEFAULT).event(event);
         executors.get(state).event(event);
     }
 
@@ -55,6 +59,7 @@ public class RuleExecutor {
     }
 
     public enum State {
+        DEFAULT,
         PAUSE,
         PREPARING_FOR_GAME,
     }
