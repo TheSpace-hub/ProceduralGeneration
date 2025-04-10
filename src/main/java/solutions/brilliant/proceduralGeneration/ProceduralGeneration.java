@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import solutions.brilliant.proceduralGeneration.commands.BSGCommandHandler;
 import solutions.brilliant.proceduralGeneration.commands.CreateEmptyWorld;
 import solutions.brilliant.proceduralGeneration.config.CustomField;
+import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 import solutions.brilliant.proceduralGeneration.listeners.PlayerHandler;
 
 import java.util.logging.Level;
@@ -25,6 +26,8 @@ public final class ProceduralGeneration extends JavaPlugin {
 
         if (Bukkit.getWorld("field") == null)
             CreateEmptyWorld.create();
+
+        RuleExecutor.getInstance(this).changeState(RuleExecutor.State.PAUSE);
     }
 
     @Override
