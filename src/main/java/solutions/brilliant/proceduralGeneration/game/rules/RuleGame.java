@@ -77,11 +77,16 @@ public class RuleGame implements Rule {
                         .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE),
                 Component.text("Подожди 1 сек. чтобы ударить снова")
                         .color(TextColor.color(0xffffff))
+                        .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE),
+                Component.text("Телепортироваться можно только с платформы")
+                        .color(TextColor.color(0xffffff))
                         .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
         ));
         axe.setItemMeta(axeMeta);
 
+        murderer.getInventory().clear();
         murderer.getInventory().setItem(0, axe);
+        murderer.sendMessage(getTeleportByAxeTip());
     }
 
     private void sendPlayerToSpectator(Player player) {
@@ -118,12 +123,29 @@ public class RuleGame implements Rule {
 
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
+        if (player.getLocation().getBlockY() <= 55 && player.getLocation().getBlockY() >= 50 &&
+                RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER) {
+            World world = Bukkit.getWorld("field");
+            Location location = new Location(
+                    world, 2, 57, 2
+            );
+            player.teleport(location);
+            player.sendMessage(getTeleportByAxeTip());
+        }
         if (player.getLocation().getBlockY() <= 0) {
             if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.CIVILIAN ||
                     RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.SPECTATOR) {
                 sendPlayerToSpectator(player);
+            } else if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER) {
+                World world = Bukkit.getWorld("field");
+                Location location = new Location(
+                        world, 2, 57, 2
+                );
+                player.teleport(location);
+                player.sendMessage(getTeleportByAxeTip());
             }
         }
+
     }
 
     private void onPlayerDropItem(PlayerDropItemEvent event) {
@@ -134,12 +156,12 @@ public class RuleGame implements Rule {
 
     private void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        if (event.getItem() != null && event.getAction().isRightClick()) {
+        if (event.getItem() != null && event.getAction().isRightClick() && player.getLocation().getY() > 55) {
             ItemStack item = event.getItem();
             if (item.getType() == Material.IRON_AXE) {
                 Block block = player.getTargetBlock(120);
-                if (block == null) {
-                    player.sendMessage(getTeleportByAxeTip());
+                if (block == null || block.getLocation().getY() != 0) {
+                    player.sendMessage(getErrorTeleportByAxeTip());
                     return;
                 }
                 Location location = block.getLocation();
@@ -157,8 +179,20 @@ public class RuleGame implements Rule {
                         .decorate(TextDecoration.BOLD),
                 Component.text(" >> ")
                         .color(TextColor.color(0xffffff)),
-                Component.text("Телепортируйся с помощью топора, посмотрев на блок")
+                Component.text("Телепортируйся с помощью топора, посмотрев на блок и нажав ПКМ")
                         .color(TextColor.color(0xffffff))
+        );
+    }
+
+    private Component getErrorTeleportByAxeTip() {
+        return Component.textOfChildren(
+                Component.text("BS")
+                        .color(TextColor.color(0xff6a00))
+                        .decorate(TextDecoration.BOLD),
+                Component.text(" >> ")
+                        .color(TextColor.color(0xffffff)),
+                Component.text("Телепортироваться можно только внутрь лабиринта!")
+                        .color(TextColor.color(0xff0000))
         );
     }
 
