@@ -22,9 +22,6 @@ public class CreateEmptyWorld {
         creator.generator(new EmptyChunkGenerator());
 
         World world = Bukkit.createWorld(creator);
-
-        new Location(world, 0, 50, 0).getBlock()
-                .setType(Material.STONE);
     }
 
     private static class EmptyChunkGenerator extends ChunkGenerator {
