@@ -2,6 +2,7 @@ package solutions.brilliant.proceduralGeneration.game.rules;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -53,10 +54,17 @@ public class RuleGame implements Rule {
         ItemStack axe = new ItemStack(Material.IRON_AXE, 1);
         ItemMeta axeMeta = axe.getItemMeta();
         axeMeta.setUnbreakable(true);
-        axeMeta.displayName(Component.text("Топор").color(TextColor.color(0xaa0000)));
+        axeMeta.displayName(Component.text("Топор")
+                .color(TextColor.color(0xaa0000))
+                .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+        );
         axeMeta.lore(List.of(
-                Component.text("Топор убирает игрока с одного удара"),
+                Component.text("Топор убирает игрока с одного удара")
+                        .color(TextColor.color(0xffffff))
+                        .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE),
                 Component.text("Подожди 1 сек. чтобы ударить снова")
+                        .color(TextColor.color(0xffffff))
+                        .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
         ));
         axe.setItemMeta(axeMeta);
 
