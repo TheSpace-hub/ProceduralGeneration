@@ -118,10 +118,11 @@ public class RulePreparingForGame implements Rule {
             if (player.getName().equals(murderer.getName())) {
                 RuleExecutor.getInstance(plugin).setPlayerRole(player, Role.MURDERER);
                 murderer.showTitle(murdererTitle);
+            } else {
+                RuleExecutor.getInstance(plugin).setPlayerRole(player, Role.CIVILIAN);
+                player.showTitle(civilianTitle);
+                sendRoleInfo(player);
             }
-            RuleExecutor.getInstance(plugin).setPlayerRole(player, Role.CIVILIAN);
-            player.showTitle(civilianTitle);
-            sendRoleInfo(player);
         }
     }
 
