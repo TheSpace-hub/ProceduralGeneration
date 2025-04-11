@@ -6,7 +6,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -16,6 +15,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import solutions.brilliant.proceduralGeneration.game.Role;
 import solutions.brilliant.proceduralGeneration.game.Rule;
@@ -23,7 +24,6 @@ import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.logging.Level;
 
 public class RuleGame implements Rule {
     private final Plugin plugin;
@@ -73,9 +73,6 @@ public class RuleGame implements Rule {
         );
         axeMeta.lore(List.of(
                 Component.text("Топор убирает игрока с одного удара")
-                        .color(TextColor.color(0xffffff))
-                        .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE),
-                Component.text("Подожди 1 сек. чтобы ударить снова")
                         .color(TextColor.color(0xffffff))
                         .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE),
                 Component.text("Телепортироваться можно только с платформы")
@@ -158,17 +155,8 @@ public class RuleGame implements Rule {
         Player player = event.getPlayer();
         if (event.getItem() != null && event.getAction().isRightClick() && player.getLocation().getY() > 55) {
             ItemStack item = event.getItem();
-            if (item.getType() == Material.IRON_AXE) {
-                Block block = player.getTargetBlock(120);
-                if (block == null || block.getLocation().getY() != 0) {
-                    player.sendMessage(getErrorTeleportByAxeTip());
-                    return;
-                }
-                Location location = block.getLocation();
-                location.add(new Vector(0, 1, 0));
-                player.teleport(location);
-                location.getWorld().strikeLightningEffect(location);
-            }
+            if (item.getType() == Material.IRON_AXE)
+                teleportMurdererToField(player);
         }
     }
 
@@ -198,9 +186,23 @@ public class RuleGame implements Rule {
 
     private void onEntityDamage(EntityDamageEvent event) {
         event.setCancelled(true);
-//        if (event.getEntity() instanceof Player && (event.getCause() == EntityDamageEvent.DamageCause.FALL ||
-//                event.getCause() == EntityDamageEvent.DamageCause.LIGHTNING))
-//            event.setCancelled(false);
+    }
+
+    private void teleportMurdererToField(Player player) {
+        Block block = player.getTargetBlock(120);
+        if (block == null || block.getLocation().getY() != 0) {
+            player.sendMessage(getErrorTeleportByAxeTip());
+            return;
+        }
+        Location location = block.getLocation();
+        location.add(new Vector(0, 1, 0));
+        player.teleport(location);
+        location.getWorld().strikeLightningEffect(location);
+
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.BLINDNESS,
+                60, 1, false, false, false
+        ));
     }
 
 }
