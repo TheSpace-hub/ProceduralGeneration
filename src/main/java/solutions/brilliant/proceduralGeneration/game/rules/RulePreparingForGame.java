@@ -5,7 +5,9 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
@@ -26,13 +28,15 @@ public class RulePreparingForGame implements Rule {
     private final int delay = 30;
     private final int assignUsersToRolesTime = 20;
 
+    private CustomField field;
+
     public RulePreparingForGame(Plugin plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public void enter() {
-        GenerateField.getInstance(plugin).generate(
+        field = GenerateField.getInstance(plugin).generate(
                 CustomField.getAllFieldsFilesNames(plugin).get(0)
         );
         countdown = delay * 20;
@@ -62,6 +66,7 @@ public class RulePreparingForGame implements Rule {
                 }
                 if (countdown / 20 == assignUsersToRolesTime) {
                     assignUsersToRoles();
+                    sendPlayersToField(field, player);
                 }
             }
         }
@@ -133,6 +138,23 @@ public class RulePreparingForGame implements Rule {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.showTitle(title);
         }
+    }
+
+    private void sendPlayersToField(CustomField field, Player player) {
+        Random random = new Random();
+
+        World world = Bukkit.getWorld("field");
+        Location location = new Location(
+                world, 2, 57, 2
+        );
+        if (player.hasPermission("bsg.civilian")) {
+            List<Integer> spawnPoint = field.getSpawnPoints().get(random.nextInt(field.getSpawnPoints().size()));
+            location = new Location(
+                    world, spawnPoint.get(0), 1, spawnPoint.get(1)
+            );
+        }
+
+        player.teleport(location);
     }
 
 }

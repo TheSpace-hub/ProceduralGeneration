@@ -23,10 +23,12 @@ public class GenerateField {
         return instance;
     }
 
-    public void generate(String name) {
+    public CustomField generate(String name) {
         clear();
-        List<List<Integer>> field = new CustomField(plugin, name).getFiled();
-        fill(field);
+        CustomField field = new CustomField(plugin, name);
+        fill(field.getFiled());
+
+        return field;
     }
 
     private void clear() {

@@ -52,6 +52,10 @@ public class CustomField {
         return (List<List<Integer>>) config.getList("field");
     }
 
+    public List<List<Integer>> getSpawnPoints() {
+        return (List<List<Integer>>) config.getList("spawn_points");
+    }
+
     public static List<String> getAllFieldsFilesNames(Plugin plugin) {
         File fieldsDir = new File(plugin.getDataFolder(), "fields");
         if (!fieldsDir.exists())
