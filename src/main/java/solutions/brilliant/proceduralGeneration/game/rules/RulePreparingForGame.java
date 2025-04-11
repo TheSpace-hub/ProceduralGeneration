@@ -169,7 +169,7 @@ public class RulePreparingForGame implements Rule {
         World world = Bukkit.getWorld("field");
 
         Player player = event.getPlayer();
-        if (player.getLocation().getBlockY() <= 56) {
+        if (player.getLocation().getBlockY() <= 55) {
             if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER) {
                 Location location = new Location(
                         world, 2, 57, 2
