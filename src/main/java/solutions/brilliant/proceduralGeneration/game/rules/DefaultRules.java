@@ -49,7 +49,7 @@ public class DefaultRules implements Rule {
         Player player = event.getPlayer();
         if (player.getLocation().getBlockY() <= 0) {
             player.teleport(
-                    new Location(player.getWorld(), 0, 50, 0)
+                    new Location(player.getWorld(), 0, 51, 0)
             );
         }
     }
