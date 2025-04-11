@@ -121,6 +121,7 @@ public class RulePreparingForGame implements Rule {
             }
             RuleExecutor.getInstance(plugin).setPlayerRole(player, Role.CIVILIAN);
             player.showTitle(civilianTitle);
+            sendRoleInfo(player);
         }
     }
 
@@ -193,7 +194,14 @@ public class RulePreparingForGame implements Rule {
                         .decorate(TextDecoration.BOLD),
                 Component.text(" >> ")
                         .color(TextColor.color(0xffffff)),
-                Component.text("Маняк скоро выйдет на охоту! Живи как можно дольше!\n")
+                Component.text("Маняк скоро выйдет на охоту! Живи как можно дольше!")
+                        .color(TextColor.color(0xffffff))
+        );
+        Component civilianTip = Component.textOfChildren(
+                Component.text("BS")
+                        .color(TextColor.color(0xff6a00))
+                        .decorate(TextDecoration.BOLD),
+                Component.text(" >> ")
                         .color(TextColor.color(0xffffff)),
                 Component.text("Используй предметы появляющиеся на карте. Они помогут тебе выжить")
                         .color(TextColor.color(0xffffff))
@@ -204,15 +212,25 @@ public class RulePreparingForGame implements Rule {
                         .decorate(TextDecoration.BOLD),
                 Component.text(" >> ")
                         .color(TextColor.color(0xffffff)),
-                Component.text("Убей всех мирных жителей\n")
+                Component.text("Убей всех мирных жителей.")
+                        .color(TextColor.color(0xffffff))
+        );
+        Component murdererTip = Component.textOfChildren(
+                Component.text("BS")
+                        .color(TextColor.color(0xff6a00))
+                        .decorate(TextDecoration.BOLD),
+                Component.text(" >> ")
                         .color(TextColor.color(0xffffff)),
                 Component.text("Подожди. Скоро ты сможешь начать")
                         .color(TextColor.color(0xffffff))
         );
-        if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER)
+        if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER) {
             player.sendMessage(murdererInfo);
-        if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.CIVILIAN)
+            player.sendMessage(murdererTip);
+        } else if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.CIVILIAN) {
             player.sendMessage(civilianInfo);
+            player.sendMessage(civilianTip);
+        }
     }
 
     private void sendStopMessageForMurder(Player player) {
