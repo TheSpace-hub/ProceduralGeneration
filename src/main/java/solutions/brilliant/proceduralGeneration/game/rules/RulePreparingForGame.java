@@ -119,11 +119,11 @@ public class RulePreparingForGame implements Rule {
             player.showTitle(civilianTitle);
         }
 
-//        int murderIndex = random.nextInt(Bukkit.getOnlinePlayers().size());
-//        Player murderer = List.copyOf(Bukkit.getOnlinePlayers()).get(murderIndex);
-//        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-//                "lp user " + murderer.getName() + " parent set murderer");
-//        murderer.showTitle(murdererTitle);
+        int murderIndex = random.nextInt(Bukkit.getOnlinePlayers().size());
+        Player murderer = List.copyOf(Bukkit.getOnlinePlayers()).get(murderIndex);
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+                "lp user " + murderer.getName() + " parent set murderer");
+        murderer.showTitle(murdererTitle);
 
     }
 
@@ -170,13 +170,36 @@ public class RulePreparingForGame implements Rule {
         World world = Bukkit.getWorld("field");
 
         Player player = event.getPlayer();
-        if (player.getLocation().getBlockY() <= 0) {
-            List<Integer> spawnPoint = field.getSpawnPoints().get(random.nextInt(field.getSpawnPoints().size()));
-            Location location = new Location(
-                    world, spawnPoint.get(0), 1, spawnPoint.get(1)
-            );
-            player.teleport(location);
+        if (player.getLocation().getBlockY() <= 56) {
+            if (player.hasPermission("bsg.murderer")) {
+                Location location = new Location(
+                        world, 2, 57, 2
+                );
+                player.teleport(location);
+                sendStopMessageForMurder(player);
+            }
+            else if (player.getLocation().getBlockY() <= 0) {
+                List<Integer> spawnPoint = field.getSpawnPoints().get(random.nextInt(field.getSpawnPoints().size()));
+                Location location = new Location(
+                        world, spawnPoint.get(0), 1, spawnPoint.get(1)
+                );
+                player.teleport(location);
+            }
         }
+
+
+    }
+
+    private void sendStopMessageForMurder(Player player) {
+        player.sendMessage(Component.textOfChildren(
+                Component.text("BS")
+                        .color(TextColor.color(0xff6a00))
+                        .decorate(TextDecoration.BOLD),
+                Component.text(" >> ")
+                        .color(TextColor.color(0xffffff)),
+                Component.text("Вы сможете начать охоту после окончания таймера")
+                        .color(TextColor.color(0xffffff))
+        ));
     }
 
 }
