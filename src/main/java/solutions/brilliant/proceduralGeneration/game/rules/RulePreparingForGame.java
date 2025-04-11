@@ -66,7 +66,7 @@ public class RulePreparingForGame implements Rule {
             }
         }
         if (countdown == 0) {
-            RuleExecutor.getInstance(plugin).changeState(RuleExecutor.State.PREPARATORY);
+            RuleExecutor.getInstance(plugin).changeState(RuleExecutor.State.GAME);
         }
     }
 

@@ -71,7 +71,6 @@ public class RuleExecutor implements Runnable {
         DEFAULT,
         PAUSE,
         PREPARING_FOR_GAME,
-        PREPARATORY,
         GAME,
     }
 
