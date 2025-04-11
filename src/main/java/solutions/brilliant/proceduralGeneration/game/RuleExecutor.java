@@ -1,5 +1,6 @@
 package solutions.brilliant.proceduralGeneration.game;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.game.rules.DefaultRules;
@@ -7,6 +8,7 @@ import solutions.brilliant.proceduralGeneration.game.rules.RuleGame;
 import solutions.brilliant.proceduralGeneration.game.rules.RulePause;
 import solutions.brilliant.proceduralGeneration.game.rules.RulePreparingForGame;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class RuleExecutor implements Runnable {
@@ -16,6 +18,7 @@ public class RuleExecutor implements Runnable {
     private State state = State.PAUSE;
 
     private final Map<State, Rule> executors;
+    private final Map<Player, Role> roles;
 
     private RuleExecutor(Plugin plugin) {
         this.plugin = plugin;
@@ -26,6 +29,8 @@ public class RuleExecutor implements Runnable {
                 State.PREPARING_FOR_GAME, new RulePreparingForGame(plugin),
                 State.GAME, new RuleGame(plugin)
         );
+
+        roles = new HashMap<>();
     }
 
     public static RuleExecutor getInstance(Plugin plugin) {
@@ -72,6 +77,14 @@ public class RuleExecutor implements Runnable {
         PAUSE,
         PREPARING_FOR_GAME,
         GAME,
+    }
+
+    public void setPlayerRole(Player player, Role role) {
+        roles.put(player, role);
+    }
+
+    public Role getPlayerRole(Player player) {
+        return roles.get(player);
     }
 
 }

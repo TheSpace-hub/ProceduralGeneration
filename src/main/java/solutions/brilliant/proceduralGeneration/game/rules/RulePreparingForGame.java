@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.commands.GenerateField;
 import solutions.brilliant.proceduralGeneration.config.CustomField;
+import solutions.brilliant.proceduralGeneration.game.Role;
 import solutions.brilliant.proceduralGeneration.game.Rule;
 import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
@@ -117,12 +118,10 @@ public class RulePreparingForGame implements Rule {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getName().equals(murderer.getName())) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                        "pex user " + murderer.getName() + " group set murderer");
+                RuleExecutor.getInstance(plugin).setPlayerRole(player, Role.MURDERER);
                 murderer.showTitle(murdererTitle);
             }
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                    "pex user " + player.getName() + " group set civilian");
+            RuleExecutor.getInstance(plugin).setPlayerRole(player, Role.CIVILIAN);
             player.showTitle(civilianTitle);
         }
     }
@@ -155,7 +154,7 @@ public class RulePreparingForGame implements Rule {
                 world, 2, 57, 2
         );
 
-        if (player.hasPermission("bsg.civilian")) {
+        if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.CIVILIAN) {
             List<Integer> spawnPoint = field.getSpawnPoints().get(random.nextInt(field.getSpawnPoints().size()));
             location = new Location(
                     world, spawnPoint.get(0), 1, spawnPoint.get(1)
@@ -171,7 +170,7 @@ public class RulePreparingForGame implements Rule {
 
         Player player = event.getPlayer();
         if (player.getLocation().getBlockY() <= 56) {
-            if (player.hasPermission("bsg.murderer")) {
+            if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER) {
                 Location location = new Location(
                         world, 2, 57, 2
                 );
@@ -212,9 +211,9 @@ public class RulePreparingForGame implements Rule {
                 Component.text("Подожди. Скоро ты сможешь начать")
                         .color(TextColor.color(0xffffff))
         );
-        if (player.hasPermission("bsg.murderer"))
+        if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER)
             player.sendMessage(murdererInfo);
-        if (player.hasPermission("bsg.civilian"))
+        if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.CIVILIAN)
             player.sendMessage(civilianInfo);
     }
 

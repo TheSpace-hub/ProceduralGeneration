@@ -11,7 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
+import solutions.brilliant.proceduralGeneration.game.Role;
 import solutions.brilliant.proceduralGeneration.game.Rule;
+import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 import java.time.Duration;
 
@@ -39,8 +41,7 @@ public class RuleGame implements Rule {
     }
 
     private void sendPlayerToSpectator(Player player) {
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                "pex user " + player.getName() + " group set spectator");
+        RuleExecutor.getInstance(plugin).setPlayerRole(player, Role.SPECTATOR);
         player.teleport(
                 new Location(player.getWorld(), player.getLocation().getX(), 10, player.getLocation().getZ())
         );
@@ -48,7 +49,8 @@ public class RuleGame implements Rule {
         player.setHealth(20);
         player.setFoodLevel(20);
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.hasPermission("bsg.civilian") || p.hasPermission("bsg.murderer"))
+            if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.CIVILIAN ||
+                    RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER)
                 p.hidePlayer(plugin, player);
         }
         player.setAllowFlight(true);
@@ -73,7 +75,8 @@ public class RuleGame implements Rule {
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (player.getLocation().getBlockY() <= 0) {
-            if (player.hasPermission("bsg.civilian") || player.hasPermission("bsg.spectator")) {
+            if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.CIVILIAN ||
+                    RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.SPECTATOR) {
                 sendPlayerToSpectator(player);
             }
         }

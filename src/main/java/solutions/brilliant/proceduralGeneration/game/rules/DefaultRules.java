@@ -11,7 +11,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
+import solutions.brilliant.proceduralGeneration.game.Role;
 import solutions.brilliant.proceduralGeneration.game.Rule;
+import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 import java.util.logging.Level;
 
@@ -48,7 +50,7 @@ public class DefaultRules implements Rule {
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (player.getLocation().getBlockY() <= 0) {
-            if (player.hasPermission("bsg.lobby"))
+            if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.LOBBY)
                 player.teleport(
                         new Location(player.getWorld(), 0, 51, 0)
                 );
@@ -71,8 +73,7 @@ public class DefaultRules implements Rule {
         Player player = event.getPlayer();
         World world = Bukkit.getWorld("field");
 
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                "pex user " + player.getName() + " group set lobby");
+        RuleExecutor.getInstance(plugin).setPlayerRole(player, Role.LOBBY);
 
         if (world == null) {
             Bukkit.getLogger().log(Level.SEVERE, "Мир не создан");
