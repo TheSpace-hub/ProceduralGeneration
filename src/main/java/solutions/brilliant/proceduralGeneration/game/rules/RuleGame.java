@@ -5,19 +5,23 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 import solutions.brilliant.proceduralGeneration.game.Role;
 import solutions.brilliant.proceduralGeneration.game.Rule;
 import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.logging.Level;
 
 public class RuleGame implements Rule {
     private final Plugin plugin;
@@ -37,6 +41,8 @@ public class RuleGame implements Rule {
             onPlayerMove((PlayerMoveEvent) event);
         if (event.getClass() == PlayerDropItemEvent.class)
             onPlayerDropItem((PlayerDropItemEvent) event);
+        if (event.getClass() == PlayerInteractEvent.class)
+            onPlayerInteract((PlayerInteractEvent) event);
     }
 
     @Override
@@ -120,5 +126,34 @@ public class RuleGame implements Rule {
         Player player = event.getPlayer();
         if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER)
             event.setCancelled(true);
+    }
+
+    private void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (event.getItem() != null && event.getAction().isRightClick()) {
+            ItemStack item = event.getItem();
+            if (item.getType() == Material.IRON_AXE) {
+                Block block = player.getTargetBlock(120);
+                if (block == null) {
+                    player.sendMessage(getTeleportByAxeTip());
+                    return;
+                }
+                Location location = block.getLocation();
+                location.add(new Vector(0, 1, 0));
+                player.teleport(location);
+            }
+        }
+    }
+
+    private Component getTeleportByAxeTip() {
+        return Component.textOfChildren(
+                Component.text("BS")
+                        .color(TextColor.color(0xff6a00))
+                        .decorate(TextDecoration.BOLD),
+                Component.text(" >> ")
+                        .color(TextColor.color(0xffffff)),
+                Component.text("Телепортируйся с помощью топора, посмотрев на блок")
+                        .color(TextColor.color(0xffffff))
+        );
     }
 }
