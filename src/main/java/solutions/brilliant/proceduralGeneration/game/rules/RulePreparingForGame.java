@@ -51,7 +51,7 @@ public class RulePreparingForGame implements Rule {
             player.setLevel(countdown / 20);
             player.setExp((float) countdown / (delay * 20));
             if (countdown % 20 == 0) {
-                if (countdown / 20 < 5) {
+                if (countdown / 20 <= 5) {
                     if (countdown == 0) {
                         player.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE, 1, 1);
                     } else {
