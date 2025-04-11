@@ -146,7 +146,6 @@ public class RulePreparingForGame implements Rule {
     }
 
     private void sendPlayersToField(CustomField field, Player player) {
-        plugin.getLogger().log(Level.INFO, "Send Players To Field");
         Random random = new Random();
 
         World world = Bukkit.getWorld("field");

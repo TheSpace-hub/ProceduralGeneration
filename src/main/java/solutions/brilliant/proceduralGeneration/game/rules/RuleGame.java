@@ -3,19 +3,19 @@ package solutions.brilliant.proceduralGeneration.game.rules;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.game.Role;
 import solutions.brilliant.proceduralGeneration.game.Rule;
 import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 import java.time.Duration;
+import java.util.List;
 
 public class RuleGame implements Rule {
     private final Plugin plugin;
@@ -26,7 +26,7 @@ public class RuleGame implements Rule {
 
     @Override
     public void enter() {
-
+        giveItemsToMurderer();
     }
 
     @Override
@@ -38,6 +38,29 @@ public class RuleGame implements Rule {
     @Override
     public void tick() {
 
+    }
+
+    private void giveItemsToMurderer() {
+        Player murderer = null;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER) {
+                murderer = player;
+                break;
+            }
+        }
+        assert murderer != null;
+
+        ItemStack axe = new ItemStack(Material.IRON_AXE, 1);
+        ItemMeta axeMeta = axe.getItemMeta();
+        axeMeta.setUnbreakable(true);
+        axeMeta.displayName(Component.text("Топор").color(TextColor.color(0xaa0000)));
+        axeMeta.lore(List.of(
+                Component.text("Топор убирает игрока с одного удара"),
+                Component.text("Подожди 1 сек. чтобы ударить снова")
+        ));
+        axe.setItemMeta(axeMeta);
+
+        murderer.getInventory().setItem(0, axe);
     }
 
     private void sendPlayerToSpectator(Player player) {

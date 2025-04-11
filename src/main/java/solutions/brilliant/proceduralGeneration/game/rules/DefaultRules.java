@@ -88,6 +88,7 @@ public class DefaultRules implements Rule {
         player.setHealth(20);
         player.setFoodLevel(20);
         player.setFlying(false);
+        player.getInventory().clear();
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.showPlayer(plugin, player);
         }
