@@ -7,6 +7,7 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -34,6 +35,8 @@ public class RuleGame implements Rule {
     public void event(Event event) {
         if (event.getClass() == PlayerMoveEvent.class)
             onPlayerMove((PlayerMoveEvent) event);
+        if (event.getClass() == PlayerDropItemEvent.class)
+            onPlayerDropItem((PlayerDropItemEvent) event);
     }
 
     @Override
@@ -111,5 +114,11 @@ public class RuleGame implements Rule {
                 sendPlayerToSpectator(player);
             }
         }
+    }
+
+    private void onPlayerDropItem(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER)
+            event.setCancelled(true);
     }
 }
