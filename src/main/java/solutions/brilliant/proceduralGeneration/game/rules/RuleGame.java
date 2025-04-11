@@ -8,6 +8,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -43,6 +44,8 @@ public class RuleGame implements Rule {
             onPlayerDropItem((PlayerDropItemEvent) event);
         if (event.getClass() == PlayerInteractEvent.class)
             onPlayerInteract((PlayerInteractEvent) event);
+        if (event.getClass() == EntityDamageEvent.class)
+            onEntityDamage((EntityDamageEvent) event);
     }
 
     @Override
@@ -156,4 +159,10 @@ public class RuleGame implements Rule {
                         .color(TextColor.color(0xffffff))
         );
     }
+
+    private void onEntityDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+            event.setCancelled(true);
+    }
+
 }
