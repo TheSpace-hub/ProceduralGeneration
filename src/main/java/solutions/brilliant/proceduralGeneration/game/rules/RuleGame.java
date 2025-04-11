@@ -24,9 +24,14 @@ import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.logging.Level;
 
 public class RuleGame implements Rule {
     private final Plugin plugin;
+
+    private int delayBeforeTeleport = 0;
+    private boolean waitingBeforeTeleport = false;
+    private Player murderer;
 
     public RuleGame(Plugin plugin) {
         this.plugin = plugin;
@@ -34,7 +39,8 @@ public class RuleGame implements Rule {
 
     @Override
     public void enter() {
-        giveItemsToMurderer();
+        murderer = findMurderer();
+        giveAxeToMurderer(true);
     }
 
     @Override
@@ -51,17 +57,14 @@ public class RuleGame implements Rule {
 
     @Override
     public void tick() {
-
+        checkOutMurdererAxe();
     }
 
-    private void giveItemsToMurderer() {
-        Player murderer = null;
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER) {
-                murderer = player;
-                break;
-            }
-        }
+    private void removeAxeForMurderer() {
+        murderer.getInventory().clear();
+    }
+
+    private void giveAxeToMurderer(boolean needTip) {
         assert murderer != null;
 
         ItemStack axe = new ItemStack(Material.IRON_AXE, 1);
@@ -83,7 +86,8 @@ public class RuleGame implements Rule {
 
         murderer.getInventory().clear();
         murderer.getInventory().setItem(0, axe);
-        murderer.sendMessage(getTeleportByAxeTip());
+        if (needTip)
+            murderer.sendMessage(getTeleportByAxeTip());
     }
 
     private void sendPlayerToSpectator(Player player) {
@@ -203,6 +207,30 @@ public class RuleGame implements Rule {
                 PotionEffectType.BLINDNESS,
                 60, 1, false, false, false
         ));
+        removeAxeForMurderer();
+        delayBeforeTeleport = 60;
+        waitingBeforeTeleport = true;
     }
 
+    private void checkOutMurdererAxe() {
+        if (waitingBeforeTeleport) {
+            delayBeforeTeleport--;
+            if (delayBeforeTeleport <= 0) {
+                delayBeforeTeleport = 0;
+                waitingBeforeTeleport = false;
+                giveAxeToMurderer(false);
+            }
+        }
+    }
+
+    private Player findMurderer() {
+        Player murderer = null;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (RuleExecutor.getInstance(plugin).getPlayerRole(player) == Role.MURDERER) {
+                murderer = player;
+                break;
+            }
+        }
+        return murderer;
+    }
 }
