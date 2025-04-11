@@ -48,9 +48,10 @@ public class DefaultRules implements Rule {
     private void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (player.getLocation().getBlockY() <= 0) {
-            player.teleport(
-                    new Location(player.getWorld(), 0, 51, 0)
-            );
+            if (player.hasPermission("bsg.lobby"))
+                player.teleport(
+                        new Location(player.getWorld(), 0, 51, 0)
+                );
         }
     }
 
@@ -78,5 +79,12 @@ public class DefaultRules implements Rule {
         Location location = new Location(world, 0, 51, 0);
         player.teleport(location);
         player.setGameMode(GameMode.ADVENTURE);
+        player.setExp(0);
+        player.setLevel(0);
+        player.setHealth(20);
+        player.setFlying(false);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.showPlayer(plugin, player);
+        }
     }
 }

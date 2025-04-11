@@ -24,7 +24,7 @@ public class RuleExecutor implements Runnable {
                 State.DEFAULT, new DefaultRules(plugin),
                 State.PAUSE, new RulePause(plugin),
                 State.PREPARING_FOR_GAME, new RulePreparingForGame(plugin),
-                State.GAME, new RuleGame()
+                State.GAME, new RuleGame(plugin)
         );
     }
 
