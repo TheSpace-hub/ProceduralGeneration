@@ -112,19 +112,19 @@ public class RulePreparingForGame implements Rule {
                         Duration.ofSeconds(1)
                 )
         );
-
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                    "lp user " + player.getName() + " parent set civilian");
-            player.showTitle(civilianTitle);
-        }
-
         int murderIndex = random.nextInt(Bukkit.getOnlinePlayers().size());
         Player murderer = List.copyOf(Bukkit.getOnlinePlayers()).get(murderIndex);
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                "lp user " + murderer.getName() + " parent set murderer");
-        murderer.showTitle(murdererTitle);
 
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getName().equals(murderer.getName())) {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+                        "pex user " + murderer.getName() + " group set murderer");
+                murderer.showTitle(murdererTitle);
+            }
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+                    "pex user " + player.getName() + " group set civilian");
+            player.showTitle(civilianTitle);
+        }
     }
 
     private void notificationOfStart() {
@@ -177,8 +177,7 @@ public class RulePreparingForGame implements Rule {
                 );
                 player.teleport(location);
                 sendStopMessageForMurder(player);
-            }
-            else if (player.getLocation().getBlockY() <= 0) {
+            } else if (player.getLocation().getBlockY() <= 0) {
                 List<Integer> spawnPoint = field.getSpawnPoints().get(random.nextInt(field.getSpawnPoints().size()));
                 Location location = new Location(
                         world, spawnPoint.get(0), 1, spawnPoint.get(1)
@@ -188,6 +187,35 @@ public class RulePreparingForGame implements Rule {
         }
 
 
+    }
+
+    private void sendRoleInfo(Player player) {
+        Component civilianInfo = Component.textOfChildren(
+                Component.text("BS")
+                        .color(TextColor.color(0xff6a00))
+                        .decorate(TextDecoration.BOLD),
+                Component.text(" >> ")
+                        .color(TextColor.color(0xffffff)),
+                Component.text("Маняк скоро выйдет на охоту! Живи как можно дольше!\n")
+                        .color(TextColor.color(0xffffff)),
+                Component.text("Используй предметы появляющиеся на карте. Они помогут тебе выжить")
+                        .color(TextColor.color(0xffffff))
+        );
+        Component murdererInfo = Component.textOfChildren(
+                Component.text("BS")
+                        .color(TextColor.color(0xff6a00))
+                        .decorate(TextDecoration.BOLD),
+                Component.text(" >> ")
+                        .color(TextColor.color(0xffffff)),
+                Component.text("Убей всех мирных жителей\n")
+                        .color(TextColor.color(0xffffff)),
+                Component.text("Подожди. Скоро ты сможешь начать")
+                        .color(TextColor.color(0xffffff))
+        );
+        if (player.hasPermission("bsg.murderer"))
+            player.sendMessage(murdererInfo);
+        if (player.hasPermission("bsg.civilian"))
+            player.sendMessage(civilianInfo);
     }
 
     private void sendStopMessageForMurder(Player player) {

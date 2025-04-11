@@ -72,7 +72,7 @@ public class DefaultRules implements Rule {
         World world = Bukkit.getWorld("field");
 
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                "lp user " + player.getName() + " parent set lobby");
+                "pex user " + player.getName() + " group set lobby");
 
         if (world == null) {
             Bukkit.getLogger().log(Level.SEVERE, "Мир не создан");

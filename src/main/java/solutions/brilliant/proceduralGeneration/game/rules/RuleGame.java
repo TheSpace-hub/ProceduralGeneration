@@ -40,7 +40,7 @@ public class RuleGame implements Rule {
 
     private void sendPlayerToSpectator(Player player) {
         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                "lp user " + player.getName() + " parent set spectator");
+                "pex user " + player.getName() + " group set spectator");
         player.teleport(
                 new Location(player.getWorld(), player.getLocation().getX(), 10, player.getLocation().getZ())
         );
