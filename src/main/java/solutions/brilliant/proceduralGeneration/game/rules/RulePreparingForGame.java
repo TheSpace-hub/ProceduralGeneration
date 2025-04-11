@@ -70,8 +70,6 @@ public class RulePreparingForGame implements Rule {
                 }
                 if (countdown / 20 == assignUsersToRolesTime) {
                     assignUsersToRoles();
-                }
-                if (countdown / 20 == assignUsersToRolesTime - 3) {
                     sendPlayersToField(field, player);
                 }
             }
