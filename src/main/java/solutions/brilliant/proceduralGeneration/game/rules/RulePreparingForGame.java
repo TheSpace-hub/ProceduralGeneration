@@ -10,6 +10,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.commands.GenerateField;
 import solutions.brilliant.proceduralGeneration.config.CustomField;
@@ -19,6 +20,7 @@ import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
 public class RulePreparingForGame implements Rule {
 
@@ -45,7 +47,8 @@ public class RulePreparingForGame implements Rule {
 
     @Override
     public void event(Event event) {
-
+        if (event.getClass() == PlayerMoveEvent.class)
+            onPlayerMove((PlayerMoveEvent) event);
     }
 
     @Override
@@ -66,6 +69,8 @@ public class RulePreparingForGame implements Rule {
                 }
                 if (countdown / 20 == assignUsersToRolesTime) {
                     assignUsersToRoles();
+                }
+                if (countdown / 20 == assignUsersToRolesTime - 3) {
                     sendPlayersToField(field, player);
                 }
             }
@@ -114,11 +119,12 @@ public class RulePreparingForGame implements Rule {
             player.showTitle(civilianTitle);
         }
 
-        int murderIndex = random.nextInt(Bukkit.getOnlinePlayers().size());
-        Player murderer = List.copyOf(Bukkit.getOnlinePlayers()).get(murderIndex);
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                "lp user " + murderer.getName() + " parent set murderer");
-        murderer.showTitle(murdererTitle);
+//        int murderIndex = random.nextInt(Bukkit.getOnlinePlayers().size());
+//        Player murderer = List.copyOf(Bukkit.getOnlinePlayers()).get(murderIndex);
+//        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+//                "lp user " + murderer.getName() + " parent set murderer");
+//        murderer.showTitle(murdererTitle);
+
     }
 
     private void notificationOfStart() {
@@ -141,12 +147,14 @@ public class RulePreparingForGame implements Rule {
     }
 
     private void sendPlayersToField(CustomField field, Player player) {
+        plugin.getLogger().log(Level.INFO, "Send Players To Field");
         Random random = new Random();
 
         World world = Bukkit.getWorld("field");
         Location location = new Location(
                 world, 2, 57, 2
         );
+
         if (player.hasPermission("bsg.civilian")) {
             List<Integer> spawnPoint = field.getSpawnPoints().get(random.nextInt(field.getSpawnPoints().size()));
             location = new Location(
@@ -155,6 +163,20 @@ public class RulePreparingForGame implements Rule {
         }
 
         player.teleport(location);
+    }
+
+    private void onPlayerMove(PlayerMoveEvent event) {
+        Random random = new Random();
+        World world = Bukkit.getWorld("field");
+
+        Player player = event.getPlayer();
+        if (player.getLocation().getBlockY() <= 0) {
+            List<Integer> spawnPoint = field.getSpawnPoints().get(random.nextInt(field.getSpawnPoints().size()));
+            Location location = new Location(
+                    world, spawnPoint.get(0), 1, spawnPoint.get(1)
+            );
+            player.teleport(location);
+        }
     }
 
 }

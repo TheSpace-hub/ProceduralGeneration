@@ -71,6 +71,9 @@ public class DefaultRules implements Rule {
         Player player = event.getPlayer();
         World world = Bukkit.getWorld("field");
 
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+                "lp user " + player.getName() + " parent set lobby");
+
         if (world == null) {
             Bukkit.getLogger().log(Level.SEVERE, "Мир не создан");
             return;
@@ -82,6 +85,7 @@ public class DefaultRules implements Rule {
         player.setExp(0);
         player.setLevel(0);
         player.setHealth(20);
+        player.setFoodLevel(20);
         player.setFlying(false);
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.showPlayer(plugin, player);
