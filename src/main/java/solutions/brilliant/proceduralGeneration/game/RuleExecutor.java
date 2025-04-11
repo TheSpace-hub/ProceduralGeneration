@@ -3,11 +3,11 @@ package solutions.brilliant.proceduralGeneration.game;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.game.rules.DefaultRules;
+import solutions.brilliant.proceduralGeneration.game.rules.RuleGame;
 import solutions.brilliant.proceduralGeneration.game.rules.RulePause;
 import solutions.brilliant.proceduralGeneration.game.rules.RulePreparingForGame;
 
 import java.util.Map;
-import java.util.logging.Level;
 
 public class RuleExecutor implements Runnable {
     private static RuleExecutor instance;
@@ -23,7 +23,8 @@ public class RuleExecutor implements Runnable {
         executors = Map.of(
                 State.DEFAULT, new DefaultRules(plugin),
                 State.PAUSE, new RulePause(plugin),
-                State.PREPARING_FOR_GAME, new RulePreparingForGame(plugin)
+                State.PREPARING_FOR_GAME, new RulePreparingForGame(plugin),
+                State.GAME, new RuleGame()
         );
     }
 
@@ -71,6 +72,7 @@ public class RuleExecutor implements Runnable {
         PAUSE,
         PREPARING_FOR_GAME,
         PREPARATORY,
+        GAME,
     }
 
 }
