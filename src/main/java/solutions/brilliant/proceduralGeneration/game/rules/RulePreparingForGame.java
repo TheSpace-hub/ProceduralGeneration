@@ -28,8 +28,8 @@ public class RulePreparingForGame implements Rule {
     private final Plugin plugin;
 
     private int countdown;
-    private final int delay = 30;
-    private final int assignUsersToRolesTime = 20;
+    private final int delay = 10;
+    private final int assignUsersToRolesTime = 5;
 
     private CustomField field;
 

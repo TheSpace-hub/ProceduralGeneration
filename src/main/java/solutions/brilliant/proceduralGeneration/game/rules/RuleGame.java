@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -144,6 +145,7 @@ public class RuleGame implements Rule {
                 Location location = block.getLocation();
                 location.add(new Vector(0, 1, 0));
                 player.teleport(location);
+                location.getWorld().strikeLightningEffect(location);
             }
         }
     }
@@ -161,9 +163,10 @@ public class RuleGame implements Rule {
     }
 
     private void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && (event.getCause() == EntityDamageEvent.DamageCause.FALL ||
-                event.getCause() == EntityDamageEvent.DamageCause.LIGHTNING))
-            event.setCancelled(true);
+        event.setCancelled(true);
+//        if (event.getEntity() instanceof Player && (event.getCause() == EntityDamageEvent.DamageCause.FALL ||
+//                event.getCause() == EntityDamageEvent.DamageCause.LIGHTNING))
+//            event.setCancelled(false);
     }
 
 }
