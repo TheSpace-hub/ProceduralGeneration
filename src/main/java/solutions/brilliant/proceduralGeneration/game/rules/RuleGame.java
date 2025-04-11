@@ -161,7 +161,8 @@ public class RuleGame implements Rule {
     }
 
     private void onEntityDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player && event.getCause() == EntityDamageEvent.DamageCause.FALL)
+        if (event.getEntity() instanceof Player && (event.getCause() == EntityDamageEvent.DamageCause.FALL ||
+                event.getCause() == EntityDamageEvent.DamageCause.LIGHTNING))
             event.setCancelled(true);
     }
 
