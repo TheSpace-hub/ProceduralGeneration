@@ -27,6 +27,9 @@ public final class ProceduralGeneration extends JavaPlugin {
         if (Bukkit.getWorld("field") == null)
             CreateEmptyWorld.create();
 
+        if (CustomField.getAllFieldsFilesNames(this).isEmpty())
+            getLogger().severe("Не существует ни одного поля!");
+
         RuleExecutor.getInstance(this).changeState(RuleExecutor.State.PAUSE);
 
         Bukkit.getScheduler().runTaskTimer(this, RuleExecutor.getInstance(this), 0, 1);
