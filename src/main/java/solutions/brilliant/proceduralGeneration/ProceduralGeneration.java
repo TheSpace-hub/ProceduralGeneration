@@ -6,7 +6,7 @@ import solutions.brilliant.proceduralGeneration.commands.BSGCommandHandler;
 import solutions.brilliant.proceduralGeneration.commands.CreateEmptyWorld;
 import solutions.brilliant.proceduralGeneration.config.CustomField;
 import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
-import solutions.brilliant.proceduralGeneration.listeners.PlayerHandler;
+import solutions.brilliant.proceduralGeneration.listeners.RulesEventHandler;
 
 import java.util.logging.Level;
 
@@ -22,7 +22,7 @@ public final class ProceduralGeneration extends JavaPlugin {
         getCommand("bs-generator").setExecutor(new BSGCommandHandler(this));
         getCommand("bs-generator").setTabCompleter(new BSGCommandHandler(this));
 
-        getServer().getPluginManager().registerEvents(new PlayerHandler(this), this);
+        getServer().getPluginManager().registerEvents(new RulesEventHandler(this), this);
 
         if (Bukkit.getWorld("field") == null)
             CreateEmptyWorld.create();

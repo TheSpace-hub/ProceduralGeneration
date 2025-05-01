@@ -12,11 +12,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 import solutions.brilliant.proceduralGeneration.game.RuleExecutor;
 
-public class PlayerHandler implements Listener {
+public class RulesEventHandler implements Listener {
 
     private final Plugin plugin;
 
-    public PlayerHandler(Plugin plugin) {
+    public RulesEventHandler(Plugin plugin) {
         this.plugin = plugin;
     }
 
